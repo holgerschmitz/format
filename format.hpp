@@ -219,9 +219,13 @@ namespace format
         Dict& operator()(const std::string& name, const T& value)
         {
             ValueWrapperBase *vw = new ValueWrapper<T>(value);
-            ValueWrapperBase *& p(env[name]);
-            delete p;
-            p = vw;
+            
+            Env::iterator it; bool inserted;
+            std::tie(it, inserted) = env.insert(std::make_pair(name, vw));
+            if (!inserted) {
+                throw std::runtime_error("Duplicate key");
+                }
+
             return *this;
         }
 

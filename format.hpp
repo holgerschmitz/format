@@ -62,7 +62,7 @@ namespace format
         }
     };
 
-    Format parseFormat(const char *& p)
+    inline Format parseFormat(const char *& p)
     {
         Format result;
         bool last_static = false;
@@ -128,13 +128,13 @@ namespace format
         return result;
     }
 
-    Format fmt(const std::string& s)
+    inline Format fmt(const std::string& s)
     {
         const char *p = s.c_str();
         return parseFormat(p);
     }
 
-    Format fmt(const char *p)
+    inline Format fmt(const char *p)
     {
         return parseFormat(p);
     }

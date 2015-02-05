@@ -34,6 +34,8 @@
 //
 //    "{mac:17x,2~:}"        one field with options "17x,2:"
 //
+//    "Opt {name:!>=_2}"     optional field
+//
 
 #include <string>
 #include <vector>
@@ -54,11 +56,16 @@ namespace format
         std::string name;
         std::string options;
         std::vector<Format> subformats;
+        bool optional;
 
         Field(const std::string& name,
               const std::string& options)
-        : name(name), options(options)
+        : name(name), options(options), optional(false)
         {
+            if (options.size() && options.at(0) == '!') {
+                optional = true;
+                this->options = options.substr(1);
+                }
         }
     };
 
@@ -268,7 +275,7 @@ namespace format
                     result += fd[f.name].toString(f);
                     }
                 catch(std::runtime_error& e) {
-                    if (f.options.at(0) != '!') { // is it optional?
+                    if (!f.optional) { // is it optional?
                         throw e;
                         }
                     }

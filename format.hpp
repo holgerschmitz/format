@@ -263,8 +263,15 @@ namespace format
             const Field& f = fs[i];
             if (f.name.size())
             {
-                // Read field
-                result += fd[f.name].toString(f);
+                try {
+                    // Read field
+                    result += fd[f.name].toString(f);
+                    }
+                catch(std::runtime_error& e) {
+                    if (f.options.at(0) != '!') { // is it optional?
+                        throw e;
+                        }
+                    }
             }
             else
             {
